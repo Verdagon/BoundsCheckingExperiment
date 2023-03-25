@@ -34,14 +34,14 @@ fn make_board(mut rand_seed: i64, num_rows: usize, num_cols: usize) -> Vec<Vec<b
   return new_rows;
 }
 
-#[cfg(feature = "bounds_checks")]
+#[cfg(not(feature = "bounds_checks"))]
 fn lookup(map: &Vec<Vec<bool>>, row_i: usize, col_i: usize) -> bool {
     unsafe {
         return *map.get_unchecked(row_i).get_unchecked(col_i);
     }
 }
 
-#[cfg(not(feature = "bounds_checks"))]
+#[cfg(feature = "bounds_checks")]
 fn lookup(map: &Vec<Vec<bool>>, row_i: usize, col_i: usize) -> bool {
     return map[row_i][col_i];
 }

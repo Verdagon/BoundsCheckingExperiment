@@ -119,7 +119,7 @@ char** cellularAutomata(char** old_rows, uint64_t numRows, uint64_t numCols) {
       } else if (num_adj_walkable > 4) {
         new_walkable = 1;
       } else {
-        new_walkable = old_rows[row_i][col_i];
+        new_walkable = lookup(old_rows, numRows, numCols, row_i, col_i);
       }
       new_row[col_i] = new_walkable;
     }

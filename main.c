@@ -4,31 +4,6 @@
 #include <stddef.h>
 #include <string.h>
 
-#ifndef BOUNDS_CHECKS
-#error "Error: Pass in -DBOUNDS_CHECKS=0 or -DBOUNDS_CHECKS=1 when compiling."
-#endif
-
-// Uses compiler specific extensions if possible.
-#ifdef __GNUC__ // GCC, Clang, ICC
- 
-#define unreachable() (__builtin_unreachable())
- 
-#elifdef _MSC_VER // MSVC
- 
-#define unreachable() (__assume(false))
- 
-#else
-// Even if no extension is used, undefined behavior is still raised by
-// the empty function body and the noreturn attribute.
- 
-// The external definition of unreachable_impl must be emitted in a separated TU
-// due to the rule for inline functions in C.
- 
-[[noreturn]] inline void unreachable_impl() {}
-#define unreachable() (unreachable_impl())
- 
-#endif
-
 typedef struct RandResult {
   int64_t newSeed;
   int64_t randInt;
@@ -67,34 +42,20 @@ char** makeBoard(int64_t randSeed, uint64_t numRows, uint64_t numCols) {
 }
 
 char lookup(char** map, uint64_t numRows, uint64_t numCols, uint64_t row_i, uint64_t col_i) {
-#if BOUNDS_CHECKS == 0
-  char* row = map[row_i];
-  return row[col_i];
-#elif BOUNDS_CHECKS == 1
-  // Bounds check
+#if BOUNDS_CHECKS == 1
   if (row_i >= numRows) {
     fprintf(stderr, "Index out of bounds!");
     exit(1);
   }
-  char* row = map[row_i];
-  // Bounds check
-  if (col_i >= numCols) {
-    fprintf(stderr, "Index out of bounds!");
-    exit(1);
-  }
-  return row[col_i];
-#elif BOUNDS_CHECKS == 2
-  if (row_i >= numRows) {
-    unreachable();
-  }
-  char* row = map[row_i];
-  if (col_i >= numCols) {
-    unreachable();
-  }
-  return row[col_i];
-#else
-#error "Bad value for BOUNDS_CHECKS"
 #endif
+  char* row = map[row_i];
+#if BOUNDS_CHECKS == 1
+  if (col_i >= numCols) {
+    fprintf(stderr, "Index out of bounds!");
+    exit(1);
+  }
+#endif
+  return row[col_i];
 }
 
 char** cellularAutomata(char** old_rows, uint64_t numRows, uint64_t numCols) {

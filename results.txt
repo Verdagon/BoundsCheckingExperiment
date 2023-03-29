@@ -1,0 +1,28 @@
+Mar 28 2023, clang 16 on Ubuntu 22.04 on Razer Blade 15" 2018, using cset shield to isolate 1 CPU.
+
+Benchmark 1: ./main_noboundschecks_O2 1337 1000 4000 false
+  Time (mean ± σ):     121.3 ms ±   0.6 ms    [User: 118.3 ms, System: 3.0 ms]
+  Range (min … max):   120.4 ms … 125.8 ms    500 runs
+ 
+  Warning: Statistical outliers were detected. Consider re-running this benchmark on a quiet PC without any interferences from other programs. It might help to use the '--warmup' or '--prepare' options.
+ 
+Benchmark 2: ./main_withboundschecks_O2 1337 1000 4000 false
+  Time (mean ± σ):     142.8 ms ±   0.6 ms    [User: 139.7 ms, System: 3.0 ms]
+  Range (min … max):   141.4 ms … 147.9 ms    500 runs
+ 
+  Warning: Statistical outliers were detected. Consider re-running this benchmark on a quiet PC without any interferences from other programs. It might help to use the '--warmup' or '--prepare' options.
+ 
+Benchmark 3: ./main_noboundschecks_O3 1337 1000 4000 false
+  Time (mean ± σ):     129.4 ms ±   0.5 ms    [User: 126.2 ms, System: 3.1 ms]
+  Range (min … max):   128.3 ms … 132.0 ms    500 runs
+ 
+Benchmark 4: ./main_withboundschecks_O3 1337 1000 4000 false
+  Time (mean ± σ):     127.6 ms ±   0.6 ms    [User: 124.3 ms, System: 3.3 ms]
+  Range (min … max):   126.4 ms … 130.0 ms    500 runs
+ 
+Summary
+  './main_noboundschecks_O2 1337 1000 4000 false' ran
+    1.05 ± 0.01 times faster than './main_withboundschecks_O3 1337 1000 4000 false'
+    1.07 ± 0.01 times faster than './main_noboundschecks_O3 1337 1000 4000 false'
+    1.18 ± 0.01 times faster than './main_withboundschecks_O2 1337 1000 4000 false'
+
